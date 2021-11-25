@@ -1,6 +1,7 @@
 package com.udacity.project4
 
 import android.app.Application
+import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.closeSoftKeyboard
@@ -9,7 +10,9 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.udacity.project4.locationreminders.RemindersActivity
@@ -22,8 +25,10 @@ import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.EspressoIdlingResource
 import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -43,6 +48,18 @@ class RemindersActivityTest :
     private lateinit var appContext: Application
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
+
+    @get:Rule
+    val activityScenarioRule: ActivityScenarioRule<RemindersActivity> =
+        ActivityScenarioRule<RemindersActivity>(RemindersActivity::class.java)
+
+    lateinit var decorView: View
+    @Before
+    fun setUpToast(){
+        activityScenarioRule.getScenario().onActivity(ActivityScenario.ActivityAction {
+            decorView = it.getWindow().getDecorView()
+        })
+    }
 
     @Before
     fun registerIdlingResource(): Unit = IdlingRegistry.getInstance().run {
@@ -113,6 +130,8 @@ class RemindersActivityTest :
         onView(withId(R.id.save_loc_but)).perform(click())
 
         onView(withId(R.id.saveReminder)).perform(click())
-
+        onView(withText(R.string.reminder_saved))
+            .inRoot(RootMatchers.withDecorView(CoreMatchers.not(decorView)))// Here we use decorView
+            .check(matches(isDisplayed()))
     }
 }
