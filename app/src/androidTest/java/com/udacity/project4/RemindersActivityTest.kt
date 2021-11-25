@@ -112,7 +112,7 @@ class RemindersActivityTest :
 
 
     @Test
-    fun saveReminder_popBack() {
+    fun saveReminder_npPopBack() {
         runBlocking {
             repository.deleteAllReminders()
         }
@@ -128,9 +128,8 @@ class RemindersActivityTest :
         onView(withId(R.id.selectLocation)).perform(click())
         onView(withId(R.id.map_container)).perform(click())
         onView(withId(R.id.save_loc_but)).perform(click())
-
-        onView(withId(R.id.saveReminder)).perform(click())
-        onView(withText(R.string.reminder_saved))
+        
+        onView(withText(R.string.select_poi))
             .inRoot(RootMatchers.withDecorView(CoreMatchers.not(decorView)))// Here we use decorView
             .check(matches(isDisplayed()))
     }
