@@ -19,6 +19,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.Objects.isNull
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -62,12 +63,20 @@ class RemindersLocalRepositoryTest {
         //Then
         assertThat(retrievedReminderDTO is Result.Success, notNullValue())
         retrievedReminderDTO as Result.Success
-
         assertThat(retrievedReminderDTO.data.title, `is`(validReminderDTO.title))
         assertThat(retrievedReminderDTO.data.description, `is`(validReminderDTO.description))
         assertThat(retrievedReminderDTO.data.latitude, `is`(validReminderDTO.latitude))
         assertThat(retrievedReminderDTO.data.longitude, `is`(validReminderDTO.longitude))
         assertThat(retrievedReminderDTO.data.location, `is`(validReminderDTO.location))
+    }
+
+    @Test
+    fun getReminder_DataNotFound() = runBlocking{
+        val validReminderDTO = validReminderDTO
+        val retrievedReminderDTO = repository.getReminder(validReminderDTO.id)
+        assertThat(retrievedReminderDTO is Result.Error, notNullValue())
+        retrievedReminderDTO as Result.Error
+        assertThat(retrievedReminderDTO.message, `is`("Reminder not found!"))
     }
 
 }

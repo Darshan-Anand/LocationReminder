@@ -28,7 +28,7 @@ class MyApp : Application() {
                 )
             }
             //Declare singleton definitions to be later injected using by inject()
-            single {
+            viewModel {
                 //This view model is declared singleton to be used across multiple fragments
                 SaveReminderViewModel(
                     get(),
