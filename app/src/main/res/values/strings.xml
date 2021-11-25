@@ -44,4 +44,6 @@
     <string name="save_remainder_button">save remainder button</string>
     <string name="you_reached">You reached:</string>
     <string name="remember">Remember:</string>
+    <string name="grant">Grant</string>
+    <string name="to_know_your_location">Grant permission to point to your nearset location</string>
 </resources>
