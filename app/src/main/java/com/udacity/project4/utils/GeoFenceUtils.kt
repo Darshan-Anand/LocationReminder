@@ -25,7 +25,7 @@ internal object GeofencingConstants {
      * Used to set an expiration time for a geofence. After this amount of time, Location services
      * stops tracking the geofence. For this sample, geofences expire after one hour.
      */
-    const val GEOFENCE_RADIUS_IN_METERS = 400f
+    const val GEOFENCE_RADIUS_IN_METERS = 500f
     const val ACTION_GEOFENCE_EVENT = "ACTION_GEOFENCE_EVENT"
 }
 

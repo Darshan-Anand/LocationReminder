@@ -59,6 +59,11 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun onLocationSelected() {
         binding.saveLocBut.setOnClickListener {
             if (this::poi.isInitialized) {
+                Log.d(TAG, "Selected Poi= $poi")
+                Log.d(TAG,"Selected Poi_latLng= ${poi.latLng}")
+                Log.d(TAG,"Selected Poi_lat= ${poi.latLng.latitude}")
+                Log.d(TAG,"Selected Poi_long= ${poi.latLng.longitude}")
+                Log.d(TAG,"Selected Poi_name= ${poi.name}")
                 _viewModel.latitude.value = poi.latLng.latitude
                 _viewModel.longitude.value = poi.latLng.longitude
                 _viewModel.selectedPOI.value = poi
@@ -67,6 +72,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment())
             } else {
                 Snackbar.make(binding.saveLocBut, R.string.select_poi, Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), R.string.select_poi, Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -207,7 +213,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun requestPermission(){
+    private fun requestPermission() {
         requestPermissions(
             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             FOREGROUND_PERMISSIONS_REQUEST_CODE
@@ -221,11 +227,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == FOREGROUND_PERMISSIONS_REQUEST_CODE){
+        if (requestCode == FOREGROUND_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableLocation()
-            }
-            else{
+            } else {
                 Snackbar.make(
                     binding.root,
                     "Location Permission not granted",
