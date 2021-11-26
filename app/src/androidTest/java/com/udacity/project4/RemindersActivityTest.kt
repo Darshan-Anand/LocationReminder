@@ -1,11 +1,13 @@
 package com.udacity.project4
 
+import android.app.Activity
 import android.app.Application
 import android.view.View
+import android.widget.Toolbar
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import androidx.test.espresso.Espresso.closeSoftKeyboard
-import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
@@ -21,8 +23,9 @@ import com.udacity.project4.locationreminders.data.local.LocalDB
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
+import com.udacity.project4.locationreminders.validReminderDTO
 import com.udacity.project4.util.DataBindingIdlingResource
-import com.udacity.project4.util.EspressoIdlingResource
+import com.udacity.project4.utils.EspressoIdlingResource
 import com.udacity.project4.util.monitorActivity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers
@@ -112,7 +115,7 @@ class RemindersActivityTest :
 
 
     @Test
-    fun saveReminder_npPopBack() {
+    fun saveReminder_PopBack() {
         runBlocking {
             repository.deleteAllReminders()
         }
@@ -128,9 +131,15 @@ class RemindersActivityTest :
         onView(withId(R.id.selectLocation)).perform(click())
         onView(withId(R.id.map_container)).perform(click())
         onView(withId(R.id.save_loc_but)).perform(click())
-        
-        onView(withText(R.string.select_poi))
+        onView(withId(R.id.saveReminder)).perform(click())
+
+        onView(withText(R.string.reminder_saved))
             .inRoot(RootMatchers.withDecorView(CoreMatchers.not(decorView)))// Here we use decorView
             .check(matches(isDisplayed()))
+        pressBack()
+        onView(withText("Title")).check(matches(isDisplayed()))
+        onView(withText("Description")).check(matches(isDisplayed()))
+        scenario.close()
     }
+
 }

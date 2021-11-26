@@ -9,9 +9,9 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.validReminderDTO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.`is`
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -58,8 +58,15 @@ class RemindersDaoTest {
         assertThat(retrievedDTO.location, `is`(reminderDTO.location))
         assertThat(retrievedDTO.latitude, `is`(reminderDTO.latitude))
         assertThat(retrievedDTO.longitude, `is`(reminderDTO.longitude))
-
     }
 
+
+    @Test
+    fun saveReminder_retrieveReminder_nullReminder() = runBlockingTest {
+
+        val retrievedDTO = dB.reminderDao().getReminderById("BA")
+
+        assertThat(null, `is`(retrievedDTO))
+    }
 
 }
