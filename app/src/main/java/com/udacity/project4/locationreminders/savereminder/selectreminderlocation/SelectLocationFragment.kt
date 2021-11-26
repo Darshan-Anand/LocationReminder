@@ -68,10 +68,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 _viewModel.longitude.value = poi.latLng.longitude
                 _viewModel.selectedPOI.value = poi
                 _viewModel.reminderSelectedLocationStr.value = poi.name
-                _viewModel.navigationCommand.value =
-                    NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment())
+                _viewModel.navigationCommand.value = NavigationCommand.Back
             } else {
-                Snackbar.make(binding.saveLocBut, R.string.select_poi, Snackbar.LENGTH_SHORT).show()
                 Toast.makeText(requireContext(), R.string.select_poi, Toast.LENGTH_LONG).show()
             }
         }
@@ -107,7 +105,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         googleMap.uiSettings.isZoomControlsEnabled = true
         val bengaluru = LatLng(12.965616, 77.5761)
         val zoomLevel = 12f
-        map.addMarker(MarkerOptions().position(bengaluru).title("Marker in Bengaluru"))
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(bengaluru, zoomLevel))
         setMapStyle(googleMap)
         enableLocation()
@@ -119,8 +116,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun setMapStyle(map: GoogleMap) {
         try {
-            // Customize the styling of the base map using a JSON object defined
-            // in a raw resource file.
             val success = map.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                     requireContext(),
@@ -242,6 +237,5 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
 }
 
-const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
 const val FOREGROUND_PERMISSIONS_REQUEST_CODE = 34
 const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
